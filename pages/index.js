@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [product, setProduct] = useState('');
+  const [affiliateLink, setAffiliateLink] = useState(''); // ✅ NEW STATE
   const [loading, setLoading] = useState(false);
   const [campaignId, setCampaignId] = useState(null);
   const [status, setStatus] = useState('');
@@ -30,7 +31,7 @@ export default function Home() {
     const res = await fetch('/api/trigger', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product })
+      body: JSON.stringify({ product, affiliateLink }) // ✅ Send link to backend
     });
     const json = await res.json();
     setCampaignId(json.id);
@@ -51,7 +52,6 @@ export default function Home() {
       fontFamily: 'system-ui, sans-serif'
     }}>
       <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-        {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: '900' }}>⚡ Ad-Killer</h1>
           <button onClick={() => setDark(!dark)} style={{
@@ -83,6 +83,22 @@ export default function Home() {
               width: '100%'
             }}
           />
+          {/* ✅ NEW INPUT BOX FOR AFFILIATE LINK */}
+          <input 
+            type="url" 
+            placeholder='🔗 Your Affiliate Link (Paste here, e.g., shareasale.com/...)' 
+            value={affiliateLink} 
+            onChange={(e) => setAffiliateLink(e.target.value)}
+            style={{
+              padding: '16px',
+              fontSize: '16px',
+              borderRadius: '16px',
+              border: '2px solid #ccc',
+              background: dark ? '#222' : '#fff',
+              color: dark ? '#fff' : '#000',
+              width: '100%'
+            }}
+          />
           <button 
             onClick={handleGenerate} 
             disabled={loading}
@@ -103,7 +119,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Status Card */}
         {campaignId && (
           <div style={{ marginTop: '20px', padding: '16px', background: dark ? '#222' : '#e0f2fe', borderRadius: '16px' }}>
             <p><strong>🆔 ID:</strong> {campaignId}</p>
@@ -112,33 +127,28 @@ export default function Home() {
           </div>
         )}
 
-        {/* Results */}
         {data && (
           <div style={{ marginTop: '24px' }}>
             <h2 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '16px' }}>📥 Content Ready</h2>
 
-            {/* Twitter */}
             <div style={{ padding: '16px', background: dark ? '#1a1a1a' : '#fff', borderRadius: '16px', marginBottom: '16px', border: '1px solid #1DA1F2' }}>
               <h3 style={{ color: '#1DA1F2', margin: 0 }}>🐦 Twitter Thread</h3>
               <textarea rows="6" style={{ width: '100%', padding: '12px', marginTop: '10px', borderRadius: '12px', border: '1px solid #ddd', background: dark ? '#333' : '#f9f9f9', color: dark ? '#fff' : '#000', fontSize: '14px' }} readOnly value={data.twitter_thread} />
               <button onClick={() => copyText(data.twitter_thread)} style={{ marginTop: '10px', padding: '14px', background: '#1DA1F2', color: '#fff', border: 'none', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '16px' }}>📋 Copy Tweets</button>
             </div>
 
-            {/* Reels Script */}
             <div style={{ padding: '16px', background: dark ? '#1a1a1a' : '#fff', borderRadius: '16px', marginBottom: '16px', border: '1px solid #FF0050' }}>
               <h3 style={{ color: '#FF0050', margin: 0 }}>🎬 Reels/TikTok Script</h3>
               <textarea rows="4" style={{ width: '100%', padding: '12px', marginTop: '10px', borderRadius: '12px', border: '1px solid #ddd', background: dark ? '#333' : '#f9f9f9', color: dark ? '#fff' : '#000', fontSize: '14px' }} readOnly value={data.reels_script} />
               <button onClick={() => copyText(data.reels_script)} style={{ marginTop: '10px', padding: '14px', background: '#FF0050', color: '#fff', border: 'none', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '16px' }}>🎥 Copy Script</button>
             </div>
 
-            {/* Google Article */}
             <div style={{ padding: '16px', background: dark ? '#1a1a1a' : '#fff', borderRadius: '16px', marginBottom: '16px', border: '1px solid #22c55e' }}>
               <h3 style={{ color: '#22c55e', margin: 0 }}>📄 Google Article</h3>
               <textarea rows="5" style={{ width: '100%', padding: '12px', marginTop: '10px', borderRadius: '12px', border: '1px solid #ddd', background: dark ? '#333' : '#f9f9f9', color: dark ? '#fff' : '#000', fontSize: '14px' }} readOnly value={data.google_article} />
               <button onClick={() => copyText(data.google_article)} style={{ marginTop: '10px', padding: '14px', background: '#22c55e', color: '#fff', border: 'none', borderRadius: '12px', width: '100%', fontWeight: 'bold', fontSize: '16px' }}>📋 Copy HTML</button>
             </div>
 
-            {/* LinkedIn & Reddit - Side by Side for Mobile */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div style={{ padding: '12px', background: dark ? '#1a1a1a' : '#fff', borderRadius: '16px', border: '1px solid #0A66C2' }}>
                 <h4 style={{ color: '#0A66C2', margin: 0, fontSize: '14px' }}>💼 LinkedIn</h4>
