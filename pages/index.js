@@ -43,37 +43,12 @@ export default function Home() {
     alert('✅ Copied to clipboard!');
   };
 
-  // ✅ Extract Image URL from HTML
   const extractImageUrl = (htmlContent) => {
     if (!htmlContent) return null;
     const match = htmlContent.match(/<img[^>]*src=["']([^"']*)["'][^>]*>/i);
     return match ? match[1] : null;
   };
 
-  // ✅ Download Image Function
-  const downloadImage = async (htmlContent) => {
-    const imageUrl = extractImageUrl(htmlContent);
-    if (!imageUrl) {
-      alert('No image found to download.');
-      return;
-    }
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${product || 'review'}_image.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } catch (e) {
-      alert('Image download failed. Right-click the image and select "Save image as".');
-    }
-  };
-
-  // ✅ Render Article with Image
   const renderArticle = (htmlContent) => {
     if (!htmlContent) return { image: null, content: htmlContent };
     const imgSrc = extractImageUrl(htmlContent);
@@ -103,7 +78,7 @@ export default function Home() {
           }}>{dark ? '☀️' : '🌙'}</button>
         </div>
         <p style={{ opacity: 0.7, marginBottom: '20px', fontSize: '14px' }}>
-          🖼️ 2200+ Words | 📥 Download Images | 🔗 Clean Links
+          🖼️ 2500+ Words | 🔗 Clean Links | 📝 Unique Structure Every Time
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -181,45 +156,24 @@ export default function Home() {
               <button onClick={() => copyText(data.reels_script)} style={{ marginTop: '10px', padding: '14px', background: '#FF0050', color: '#fff', border: 'none', borderRadius: '12px', width: '100%', fontWeight: 'bold' }}>🎥 Copy Script</button>
             </div>
 
-            {/* ✅ GOOGLE ARTICLE CARD (With Image Download) */}
+            {/* ✅ GOOGLE ARTICLE CARD (Image Show, No Download Button) */}
             <div style={{ padding: '16px', background: dark ? '#1a1a1a' : '#fff', borderRadius: '16px', marginBottom: '16px', border: '1px solid #22c55e' }}>
-              <h3 style={{ color: '#22c55e', margin: 0 }}>📄 Google Article (Long Form)</h3>
+              <h3 style={{ color: '#22c55e', margin: 0 }}>📄 Google Article (2500+ Words)</h3>
               
               {/* Image Display */}
               {renderArticle(data.google_article).image && (
-                <>
-                  <img 
-                    src={renderArticle(data.google_article).image} 
-                    alt={`${product} Review`} 
-                    style={{ 
-                      width: '100%', 
-                      maxWidth: '100%', 
-                      height: 'auto', 
-                      borderRadius: '12px', 
-                      margin: '20px 0',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                    }} 
-                  />
-                  {/* 🆕 IMAGE DOWNLOAD BUTTON */}
-                  <button 
-                    onClick={() => downloadImage(data.google_article)} 
-                    style={{ 
-                      marginBottom: '15px', 
-                      padding: '10px 16px', 
-                      background: '#22c55e', 
-                      color: '#fff', 
-                      border: 'none', 
-                      borderRadius: '8px', 
-                      cursor: 'pointer', 
-                      fontWeight: 'bold',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    📥 Download Image
-                  </button>
-                </>
+                <img 
+                  src={renderArticle(data.google_article).image} 
+                  alt={`${product} Review`} 
+                  style={{ 
+                    width: '100%', 
+                    maxWidth: '100%', 
+                    height: 'auto', 
+                    borderRadius: '12px', 
+                    margin: '20px 0',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                  }} 
+                />
               )}
               
               {/* HTML Content (Without Image) */}
